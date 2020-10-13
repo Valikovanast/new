@@ -20,3 +20,6 @@
 """
 
 ip = "192.168.3.1"
+ip=ip.split('.')
+print(ip[0]+"\t\t"+ip[1]+"\t\t"+ip[2]+"\t\t"+ip[3]+"\n"+'{:08b}'.format(int(ip[0],10))+"\t"+'{:08b}'.format(int(ip[1],10))+"\t"+'{:08b}'.format(int(ip[2],10))
++"\t"+'{:08b}'.format(int(ip[3],10)))

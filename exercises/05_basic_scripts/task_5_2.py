@@ -24,3 +24,17 @@ Out[1]: '11111111111111111111111111110000'
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+net= input('Введите IP-сети (10.1.1.0/24): ')
+net=net.split('.')
+mask=net[3].split('/')
+net[3]=mask[0]
+mask1=mask[1]
+mask=mask[1]
+mask=int(mask)*"1"+"0"*(32-int(mask))
+mask2=mask[:8]
+mask3=mask[8:16]
+mask4=mask[16:24]
+mask5=mask[24:32]
+print("Network:\n"+'{:d}\t\t{:d}\t\t{:d}\t\t{:d}\n'.format(int(net[0]),int(net[1]),int(net[2]),int(net[3]))+'{:08b}\t{:08b}\t{:08b}\t{:08b}\n\n'.format(int(net[0]),int(net[1]),int(net[2]),int(net[3]))+
+"Mask:\n/"+mask1+'\n{:d}\t\t{:d}\t\t{:d}\t\t{:d}\n'.format(int(mask2,2),int(mask3,2),int(mask4,2),int(mask5,2))+
+mask2+"\t"+mask3+"\t"+mask4+"\t"+mask5+"\n")

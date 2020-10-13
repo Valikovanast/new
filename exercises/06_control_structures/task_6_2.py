@@ -13,3 +13,16 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+a=input("Введите IP-адрес(10.0.1.1):")
+a=a.strip()
+a1=a.split('.')
+if int(a1[0]) in range(1,224):
+   print("unicast")
+elif int(a1[0]) in range(224,240):
+   print("multicast")
+elif a =='255.255.255.255':
+   print("local broadcast")
+elif a == '0.0.0.0':
+   print("unassigned")
+else:
+   print("unused")

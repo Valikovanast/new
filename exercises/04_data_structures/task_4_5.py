@@ -13,3 +13,8 @@
 
 command1 = "switchport trunk allowed vlan 1,2,3,5,8"
 command2 = "switchport trunk allowed vlan 1,3,8,9"
+m=command1[30:].split(',')
+n=command2[30:].split(',')
+a= set(m)
+b= set(n)
+print(a&b)

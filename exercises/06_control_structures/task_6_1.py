@@ -12,3 +12,9 @@
 """
 
 mac = ["aabb:cc80:7000", "aabb:dd80:7340", "aabb:ee80:7000", "aabb:ff80:7000"]
+mac_cisco=list()
+for mc in mac:
+    if ':' in mc:
+        mc=mc.replace(':','.')
+        mac_cisco.append(mc)
+print(mac_cisco)    

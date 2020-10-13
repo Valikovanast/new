@@ -51,3 +51,11 @@ for intf, vlan in access.items():
             print(f" {command} {vlan}")
         else:
             print(f" {command}")
+
+for intf,lst in trunk.items():
+    print("Interface FastEthernet "+ intf)
+    for command in trunk_template:
+        if command.endswith("allowed vlan"):
+            print(f" {command}" + " remove " + lst[1] if lst[0]=="del" else f" {command}"+" "+ ' '.join(lst))
+        else:
+            print(f" {command}")
