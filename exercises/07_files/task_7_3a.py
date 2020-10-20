@@ -24,3 +24,12 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+file= open("new/exercises/07_files/CAM_table.txt", "r")
+new=list()
+for f in file:
+    tb = f.split()
+    if len(tb) == 4 and tb[0].isdigit():
+        new.append([int(tb[0]),tb[1],tb[3]])
+for a,b,c in sorted(new):
+    print(str(a)+"\t"+b+"\t"+c)
+file.close()

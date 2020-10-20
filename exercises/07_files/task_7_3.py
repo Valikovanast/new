@@ -17,3 +17,9 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+file= open("new/exercises/07_files/CAM_table.txt", "r")
+for f in file:
+    tb = f.split()
+    if len(tb) == 4 and tb[0].isdigit():
+        print(tb[0] +'\t' + tb[1] + '\t ' + tb[3])
+file.close()
