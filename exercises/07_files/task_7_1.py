@@ -27,3 +27,4 @@ for line in f:
         "Last update", line[5].replace(",",""),
         "Outbound Interface", line[6],
         ))
+f.close()
