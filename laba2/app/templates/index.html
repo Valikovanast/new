@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{ request.url }}
+<h1 class="my-5">Задание к лабораторной работе</h1>
+
+<p>
+    <ul>
+        <li>параметры URL</li>
+        <li>заголовки запроса</li>
+        <li>cookie</li>
+        <li>параметры формы</li>
+    </ul>
+</p>
+
+{% endblock %}

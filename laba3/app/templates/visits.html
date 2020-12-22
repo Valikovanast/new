@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="my-5">Счетчик посещений</h1>
+<p>
+    Вы посетили данную страницу {{ session.get('visits') }} раз.
+</p>
+
+{% endblock %}
