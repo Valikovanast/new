@@ -18,3 +18,15 @@ for mc in mac:
         mc=mc.replace(':','.')
         mac_cisco.append(mc)
 print(mac_cisco)    
+
+
+
+        
+
+
+
+
+
+
+
+

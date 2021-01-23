@@ -3,7 +3,9 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 
 login_manager= LoginManager()
 
+
 app= Flask(__name__)
+application = app
 
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -64,7 +66,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    login_user()
+    logout_user()
     return redirect(url_for('index'))
 
 @app.route('/secret_page')

@@ -16,8 +16,11 @@ images_ids = ['6e12f3de-d5fd-4ebb-855b-8cbc485278b7',
 
 def generate_comments(replies=True):
     comments = []
-    for comment in range(randint(1, 3)):
+    i = randint(1,3)
+    while i > 0:
         comment = { 'author': fake.name(), 'text': fake.text() }
+        i-=1
+        comments.append(comment)
         if replies:
             comment['replies'] = generate_comments(replies=False)
     return comments
@@ -29,7 +32,7 @@ def generate_post(i):
         'author': fake.name(),
         'date': fake.date_time_between(start_date='-2y', end_date='now'),
         'image_filename': f'{images_ids[i]}.jpg',
-        'comments': generate_comments()
+        'comments': generate_comments(True)
     }
 
 posts_list = sorted([generate_post(i) for i in range(5)], key=lambda p: p['date'], reverse=True)

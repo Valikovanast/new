@@ -44,9 +44,21 @@ Cгенерировать топологию, которая соответст�
 
 # эти заготовки написаны чтобы показать в какой момент должна
 # рисоваться топология (после вызова функции)
-def create_network_map(filenames):
-    pass
+from task_11_1 import parse_cdp_neighbors
+from draw_network_graph import draw_topology
+from pprint import pprint
 
+
+def create_network_map(filenames):
+    network_map = {}
+
+    for filename in filenames:
+        with open(filename) as show_command:
+            parsed = parse_cdp_neighbors(show_command.read())
+            for key, value in parsed.items():
+                if not network_map.get(value) == key:
+                    network_map[key] = value
+    return network_map
 
 if __name__ == "__main__":
     infiles = [
@@ -57,5 +69,5 @@ if __name__ == "__main__":
     ]
 
     topology = create_network_map(infiles)
-    # рисуем топологию:
-    # draw_topology(topology)
+    pprint(topology)
+    draw_topology(topology)
