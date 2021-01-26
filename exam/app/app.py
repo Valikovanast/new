@@ -18,6 +18,30 @@ from auth import bp as auth_bp, init_login_manager
 init_login_manager(app)
 app.register_blueprint(auth_bp)
 
+
+
+def load_reviews(user_id, film_id):
+    cursor = mysql.connection.cursor(named_tuple=True)
+    cursor.execute('SELECT * FROM `exam_review` WHERE users_id=%s AND film_id=%s;',(user_id, film_id,))
+    review=cursor.fetchone()
+    cursor.close()
+    return review
+
+def load_films(film_id):
+    cursor = mysql.connection.cursor(named_tuple=True)
+    cursor.execute('SELECT * FROM `film_description` WHERE film_description.id=%s;',(film_id,))
+    film=cursor.fetchone()
+    cursor.close()
+    return film
+
+def load_status(status_id):
+    cursor = mysql.connection,cursor(named_tuple=True)
+    cursor.execute('SELECT * FROM exam_status WHERE id=%s;',(status_id,))
+    status=cursor.fetchone()
+    cursor.close()
+    return status
+
+
 @app.route('/')
 def index():
     cursor = mysql.connection.cursor(named_tuple= True)
@@ -106,7 +130,7 @@ def create():
         return render_template('films/new.html', film=film)
     mysql.connection.commit()
     cursor.close()
-    flash(f' Фильм был успешно добавлен', 'success')
+    flash(' Фильм был успешно добавлен', 'success')
     return redirect(url_for('index'))
 
 """
@@ -165,8 +189,8 @@ def update(film_id):
         return render_template('films/edit.html', film=film)
     mysql.connection.commit()
     cursor.close()
-    flash(f'Фильм успешно обновлен', 'success')
-    return redirect(url_for('films'))
+    flash('Фильм успешно обновлен', 'success')
+    return redirect(url_for('index'))
 
 
 @app.route('/films/<int:film_id>/delete', methods =['POST'])
@@ -205,7 +229,7 @@ def make_review(film_id):
     mysql.connection.commit()
     cursor.close()
     flash('Ваш отзыв успешно добавлен', 'success')
-    return redirect(url_for('films'))
+    return redirect(url_for('index'))
 
 """
 @app.route('/images/<image_id>')
@@ -216,3 +240,8 @@ def image(image_id):
     return send_from_directory(app.config['UPLOAD_FOLDER'], img.storage_filename)
 
 """
+
+
+    @property
+    def html(self):
+        return markdown.markdown(self.text)
