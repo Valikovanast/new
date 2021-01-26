@@ -35,7 +35,7 @@ def load_films(film_id):
     return film
 
 def load_status(status_id):
-    cursor = mysql.connection,cursor(named_tuple=True)
+    cursor = mysql.connection.cursor(named_tuple=True)
     cursor.execute('SELECT * FROM exam_status WHERE id=%s;',(status_id,))
     status=cursor.fetchone()
     cursor.close()
@@ -239,9 +239,8 @@ def image(image_id):
         abort(404)
     return send_from_directory(app.config['UPLOAD_FOLDER'], img.storage_filename)
 
-"""
 
 
-    @property
     def html(self):
         return markdown.markdown(self.text)
+        """
