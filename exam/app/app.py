@@ -107,7 +107,7 @@ def create():
     mysql.connection.commit()
     cursor.close()
     flash(f' Фильм был успешно добавлен', 'success')
-    return redirect(url_for('index.html'))
+    return redirect(url_for('index'))
 
 """
 @app.route('/films/create', method=['POST'])
@@ -148,10 +148,11 @@ def update(film_id):
     '''
     cursor = mysql.connection.cursor(named_tuple = True)
     try:
-        cursor.execute(query, (name, description, prod_year, country, director, screenwriter, actors, duration))
+        cursor.execute(query, (id, name, description, prod_year, country, director, screenwriter, actors, duration))
     except connector.errors.DatabaseError as err:
         flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
         film={
+                'id' : id,
                 'name' : name,
                 'description' : description,
                 'prod_year' : prod_year,
