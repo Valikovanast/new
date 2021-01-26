@@ -148,7 +148,10 @@ class Review(db.Model):
     text = db.Column(db.Text(), nullable=False)
     created_at=db.Column(db.DateTime, nullable=False, server_default=sa.sql.func.now())
     course_id=db.Column(db.Integer,db.ForeignKey('courses.id'))
-    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id=db.Column(db.Integer, db.ForeignKey('users4.id'))
+
+    course=db.relationship('Course')
+    user=db.relationship('User')
 
 
 

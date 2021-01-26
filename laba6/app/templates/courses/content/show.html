@@ -1,0 +1,11 @@
+{% extends 'courses/content/base.html' %}
+
+{% block content %}
+      {% if step %}
+        {% if step.content_type == 'text' %}
+          {{ step.page.html | safe  }}
+        {% endif %}
+      {% else %}
+        <p>Пока здесь нет материалов...</p>
+      {% endif %}
+{% endblock %}

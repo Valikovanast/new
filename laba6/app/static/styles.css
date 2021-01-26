@@ -1,0 +1,197 @@
+.logo {
+    max-width: 200px;
+}
+
+.profile {
+    max-width: 60px;
+}
+
+.navbar {
+    height: 80px;
+}
+
+.alerts-area {
+    margin-top: 80px !important; 
+    opacity: 80%;
+}
+
+.main {
+    margin-top: 80px !important; 
+}
+
+.title-area {
+    background-color: black;
+    background-image: url('images/background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    font-size: 1.5rem;
+    min-height: calc(100vh - 80px);
+}
+
+.footer {
+    height: 100px;
+}
+
+.course {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 4rem 1.5rem;
+    height: 95%;
+    width: 95%;
+    margin: auto;
+    background-size: cover;
+    background-position: center;
+    background-color: black;
+}
+
+.course .title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+}
+
+.course p {
+    margin: 0;
+}
+
+.course a {
+    color: white;
+}
+
+.course a:hover {
+    text-decoration: none;
+}
+
+.login-page .title-area {
+    min-height: calc(100vh - 180px);
+}
+
+.catalog-btn {
+    font-size: 1.5rem !important;
+    text-transform: uppercase;
+    font-weight: bold;
+
+}
+
+.courses-list .row:hover {
+    cursor: pointer;
+    border: 1px solid black !important;
+}
+
+.course-logo {
+    width: 170px; 
+    height: 170px; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    background-size: cover;
+}
+
+.rating {
+    flex-shrink: 0;
+}
+
+.background-preview {
+    border: 3px dashed grey;
+    flex-grow: 1;
+}
+
+.sidebar {
+    min-width: 350px;
+    max-width: 350px;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+.sidebar .sidebar-content a {
+    color: white;
+}
+
+.sidebar-content {
+    overflow-y: auto;
+}
+
+.sidebar-content p {
+    border-left: 3px solid transparent;
+}
+
+.sidebar-content p:hover {
+    border-left: 3px solid var(--teal);
+    background-color: rgba(40, 167, 69, 0.2);
+}
+
+.sidebar-content p.active {
+    border-left: 3px solid rgba(40, 167, 69, 0.5);
+    background-color: rgba(40, 167, 69, 0.5);
+}
+
+.sidebar-footer {
+    height: 90px;
+    flex-shrink: 0;
+}
+
+.theme > p {
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+}
+
+.subtheme > p {
+    padding-left: 2rem;
+    padding-right: 0.5rem;
+}
+
+.content-main {
+    flex-grow: 1; 
+    overflow: auto; 
+    min-height: 2em;
+}
+
+.content-main img {
+    max-width: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.content-footer {
+    flex-shrink: 0;
+    height: 90px;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+.steps .active {
+    background-color: green;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .title-area .description {
+        width: 100% !important;
+        text-align: justify !important;
+        font-size: 1rem !important;
+    }
+    .course-logo {
+        width: 100%;
+    }
+}

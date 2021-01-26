@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- https://developer.snapappointments.com/bootstrap-select/ -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <title>Образовательный портал | Московский политех</title>
+</head>
+
+<body style="height: 100vh;" class="d-flex flex-column flex-nowrap">
+    <main class="d-flex overflow-hidden flex-grow-1">
+        <aside class="sidebar text-white bg-dark d-none d-md-flex flex-column">
+            <div class="sidebar-header border-bottom border-right border-success">
+                <div class="text-center my-3">
+                    {% if current_user.is_authenticated %}
+                        <div class="dropdown d-inline-block">
+                            <div class="profile cursor-pointer" title="{{ current_user.full_name }}" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-fluid rounded-circle"
+                                    src="{{ url_for('static', filename='images/default-profile-picture-300x300.jpeg') }}"
+                                    alt="">
+                            </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Профиль</a>
+                                <a class="dropdown-item" href="#">Мои курсы</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Выйти</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a class="btn btn-lg btn-outline-light" href="{{ url_for('auth.login') }}">Войти</a>
+                    {% endif %}
+                </div>
+    
+                <div class="text-center">
+                    <h4 class="mb-3">
+                        <a class="text-white" href="{{ url_for('courses.show', course_id=course.id) }}">
+                            {{ course.name }}
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        
+            <div class="sidebar-content border-right border-success py-3">
+                
+                {% for theme in course.themes %}
+                  <div class="theme">
+                      <p class="font-weight-bold">
+                        <a href="{{ url_for('courses.show_content', course_id=course.id, theme_id=theme.id) }}">
+                            Тема {{ loop.index }}. {{ theme.name }}
+                        </a>  
+                      </p>
+                      {% for subtheme in theme.subthemes %}
+                        <div class="subtheme">
+                            <p {% if step.theme == subtheme %}class="active"{% endif %}>
+                                <a href="{{ url_for('courses.show_content', course_id=course.id, theme_id=subtheme.id) }}">
+                                    {{ subtheme.name }}
+                                </a>
+                            </p>
+                        </div>
+                      {% endfor %}
+                  </div>
+                {% endfor %}
+            </div>
+
+            <div class="sidebar-footer mt-auto border-top border-success d-flex justify-content-center">
+                <div class="logo py-3">
+                    <a href="{{ url_for('index') }}">
+                        <img class="logo img-fluid" src="{{ url_for('static', filename='images/polytech_logo.png') }}"
+                            alt="polytech-logo">
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="content-main">
+                <div class="container-fluid mt-5 px-5">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="content-footer border-top border-success bg-dark d-flex align-items-center py-3">
+                <div class="container-fluid px-5 d-flex align-items-center">
+                    {% if step %}
+                        {% set prev_url = navigator.prev_url %}
+                        {% set next_url = navigator.next_url %}
+                        <a href="{{ prev_url or '#' }}" class="btn btn-lg btn-success mr-auto">Предыдущий шаг</a>
+                        <div class="steps d-none d-md-block">
+                            {% for s in step.theme.steps %}
+                                <a href="{{ url_for('courses.show_content', course_id=course.id, theme_id=step.theme.id, step_id=s.id) }}" title="Шаг {{ loop.index }} из {{ step.theme.steps | length }}" class="dot {% if s == step %}active{% endif %}"></a>
+                            {% endfor %}
+                        </div>
+                        <a href="{{ next_url or '#' }}" class="btn btn-lg btn-success ml-auto">Следующий шаг</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+    <script defer src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+
+</html>

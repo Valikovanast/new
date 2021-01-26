@@ -3,16 +3,16 @@
 {% block content%}
 <form method="POST">
     <div class="form-group">
-        <label for="number">Номер телефона</label>
-        <input type="text" name="number" id="number" class="form-control is-valid">   
+        <label for="number"> Введите номер телефона</label>
+        <input type="text" name="number" id="number" class="form-control {{ color }}" value="{{ res }}">  
+        {% if msg_error %}
+        <div class="invalid-feedback">
+              {{msg_error}}
+        </div>
+        {% endif %}
     </div>
     <div class="form-group text-center">
         <input type="submit" value="Отправить" class="btn btn-primary">
-        <div class="invalid-feedback">
-            {% if msg_error %}
-              {{msg_error}}
-            {% endif %}
-        </div>
     </div>
 </form>
 

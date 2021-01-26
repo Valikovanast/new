@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <h3 class="my-5"> {{ film.name }}</h3>
+
+<table class="table">    
+    <tbody>
+        <tr>
+            <th>Название</th>
+            <th>{{ film.name }}</th>
+        </tr>
+        <tr>
+            <th>Жанры</th>
+            <th>{{ film.genre }}</th>
+        </tr>
+        <tr>
+            <th>Описание</th>
+            <th>{{ film.description }}</th>
+        </tr>
+        <tr>
+            <th>Год выпуска</th>
+            <th>{{ film.prod_year }}</th>
+        </tr>
+        <tr>
+            <th>Страна</th>
+            <th>{{ film.country }}</th>
+        </tr>
+        <tr>
+            <th>Режисер</th>
+            <th>{{ film.director }}</th>
+        </tr>
+        <tr>
+            <th>Сценарист</th>
+            <th>{{ film.screenwriter }}</th>
+        </tr>
+        <tr>
+            <th>Актеры</th>
+            <th>{{ film.actors }}</th>
+        </tr>
+        <tr>
+            <th>Длительность (мин)</th>
+            <th>{{ film.duration }}</th>
+        </tr>
+        <tr>
+            <th>Отзывы</th>
+            <th>  </th>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th> {{ film.last_name }} {{ film.first_name }} {{ film.middle_name }}</th>
+            <th>{{ film.text_field }}</th>
+            <th>{{ film.mark }}</th>
+        </tr>
+    </tbody>
+</table>
+
+<div class="btn-group">
+    <a class="btn btn-warning" href=" {{ url_for('review', film_id= film.id) }}">Написать рецензию </a>
+</div>
+
+</div>
+
+
+
+
+{% endblock %}

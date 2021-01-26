@@ -126,7 +126,7 @@ def update(user_id):
     last_name = request.form.get('last_name') or None
     middle_name = request.form.get('middle_name') or None
     try:
-        role_id = int(request.form.get('role_id'))
+        role_id = int(request.form.get('role_id')) 
     except ValueError:
         role_id = None
     query = '''

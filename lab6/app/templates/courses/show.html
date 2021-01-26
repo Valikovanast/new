@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="title-area text-center py-5 d-flex" style="background-image: url({{ course.bg_image.url }});">
+    <div class="m-auto">
+        <h1 class="title mb-3 font-weight-bold">{{ course.name }}</h1>
+        <p class="mb-3 mx-auto">
+            {{ course.category.name }} | <span>★</span> <span>{{ "%.2f" | format(course.rating) }}</span>
+        </p>
+        <div class="container">
+            <p class="description w-75 mb-5 mx-auto">
+                {{ course.short_desc }}
+            </p>
+        </div>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('courses.show_content', course_id=course.id) }}" class="btn btn-primary btn-lg">Перейти к материалам курса</a>
+        {% else %}
+            <button class="btn btn-primary btn-lg" disabled>Записаться</button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container mt-5">
+    <section class="about mb-5">
+        <h2 class="mb-3 text-center text-uppercase font-weight-bold">О курсе</h2>
+        <p>{{ course.full_desc }}</p>
+    </section>
+
+    <section class="program mb-5">
+        <h2 class="mb-3 text-center text-uppercase font-weight-bold">Программа курса</h2>
+
+        {% for theme in course.themes %}
+            <div class="card mb-3">
+                <div class="card-header d-flex align-items-center">
+                    <h5 class="mb-0">Тема {{ loop.index }}. {{ theme.name }}</h5>
+                    {% if current_user.is_authenticated and current_user.id == course.author_id %}
+                        <button class="btn btn-primary btn-sm ml-auto" data-toggle="modal" data-target="#addSubThemeModal" title="Добавить пункт" data-parent-id="{{ theme.id }}">+</button>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% set outer_loop = loop %}
+                    {% for subtheme in theme.subthemes %}
+                        <div class="d-flex align-items-center">
+                            <p class="card-text mb-3">{{ outer_loop.index }}.{{ loop.index }}. {{ subtheme.name }}</p>
+                            {% if current_user.is_authenticated and current_user.id == course.author_id %}
+                            <a href="{{ url_for('courses.new_step', course_id=course.id, theme_id=subtheme.id) }}" class="btn btn-sm ml-auto" title="Добавить материал"
+                                data-parent-id="{{ theme.id }}">+</a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if current_user.is_authenticated and current_user.id == course.author_id %}
+            <div class="text-center">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addThemeModal">
+                    Добавить тему
+                </button>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+<div id="addThemeModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавление темы</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('courses.create_theme', course_id=course.id) }}">
+                    <label for="themeName">Название темы</label>
+                    <input id="themeName" type="text" name="name" class="form-control">
+                    <input type="submit" class="d-none" id="addThemeSubmit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <label for="addThemeSubmit" class="btn btn-primary mb-0">Добавить</label>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addSubThemeModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="parentThemeName"></span> &rarr; добавление пункта</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('courses.create_theme', course_id=course.id) }}">
+                    <input type="hidden" name="parent_id">
+                    <label for="subThemeName">Название пункта</label>
+                    <input id="subThemeName" type="text" name="name" class="form-control">
+                    <input type="submit" class="d-none" id="addSubThemeSubmit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <label for="addSubThemeSubmit" class="btn btn-primary mb-0">Добавить</label>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

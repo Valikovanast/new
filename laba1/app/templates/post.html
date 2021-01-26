@@ -1,54 +1,70 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row my-1">
-    <div class="col-sm-12 d-flex justify-content-left">
-        <h2>{{post.title}}</h2>
-    </div>
-</div>
-<div class="row my-1">
-    <div class="col-sm-6 d-flex justify-content-left">
-        <h5 class="mx-1">{{post.author}},</h5>
-        <h5 class="mx-1">{{post.date.strftime('%d.%m.%Y')}}</h5>
-    </div>
-</div>
-<div class="row my-3">
-    <div class="col-sm-12 d-flex justify-content-center">
-        <img src="{{url_for('static', filename='images/' ~ post.image_filename) }}" style="max-width: 60%;" alt="postpict">
-    </div>
-</div>
-<div class="row my-3">
-    <div class="col-sm-12 d-flex justify-content-center">
-        <p class="mx-1" style="text-align: justify;">{{post.text}}</p>
-    </div>
-</div>
-
-<div class="form-group my-1" style="border-color: grey;">
-        <form method="POST"style="border-color: grey; background-color: hotpink;" >
-            <div class="row">
-                    <label class="col-sm-12 bg-grey" for="comment" style="background-color: grey;">Оставьте коментарий</label>
-                    <textarea class="col-sm-12" name="comment" id="comment" rows="2" style="max-width: 100%;"></textarea>
-                    <button class="btn btn-primary mt-2">Отправить</button>
-            </div>
-        </form>
-</div>
-
-
-<div class="media">
-    <img class="mr-3" style="width: 5%; height: 5%;" src="{{url_for('static', filename='images/name.jpg')}}" alt="Generic placeholder image">
-    <div class="media-body">
-      <h5 class="mt-0">Media heading</h5>
-      {{post.comments}}
-      <div class="media mt-3">
-        <a class="pr-3" href="#">
-          <img style="width: 5%; height: 5%;" src="{{url_for('static', filename='images/name.jpg')}}" alt="Generic placeholder image">
-        </a>
-        <div class="media-body">
-          <h5 class="mt-0">Media heading</h5>
-          {{post.comments}}
+<div>
+    <div class="row my-1">
+        <div class="col-sm-12 d-flex justify-content-left">
+            <h2>{{post.title}}</h2>
         </div>
-      </div>
     </div>
-  </div>
+    <div class="row my-1">
+        <div class="col-sm-6 d-flex justify-content-left">
+            <h5 class="mx-1">{{post.author}},</h5>
+            <h5 class="mx-1">{{post.date.strftime('%d.%m.%Y')}}</h5>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-sm-12 d-flex justify-content-center">
+            <img src="{{url_for('static', filename='images/' ~ post.image_filename) }}" style="max-width: 60%;" alt="postpict">
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-sm-12 d-flex justify-content-center">
+            <p class="mx-1" style="text-align: justify;">{{post.text}}</p>
+        </div>
+    </div>
+    
+    <div class="form-group my-3" style="border-color: rgb(14, 13, 13);">
+            <form method="POST" >
+                <div class="form-group">
+                        <label class="form-control" for="comment" style="background-color: grey;">Оставьте коментарий</label>
+                        <textarea class="form-control" name="comment" id="comment" rows="2" style="max-width: 100%;"></textarea>
+                        <button class="btn btn-primary mt-2">Отправить</button>
+                </div>
+            </form>
+    </div>
+    
+    <div class="media mt-3">
+        <div class="row">
+            {% for i in post.comments %}
+            <div class="col-md-12">
+                <img class="mr-3" style="max-width: 30px; max-height: 30px;" src="{{ url_for('static', filename='images/name.jpg') }}" alt="Generic placeholder image">
+                    <div class="media-body" >
+                           <h5 class="mt-0">{{ i['author'] }}</h5>
+                           {{ i['text'] }}
+                            {% if i['replies'] %}
+                            <div class="media m-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for m in i['replies'] %}
+                                        <img class="mr-3" style="max-width: 20px; max-height: 20px;" src="{{url_for('static', filename='images/name.jpg')}}" alt="ph">
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ m['author'] }}</h5>
+                                            {{ m['text'] }}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>  
+            </div>
+                             
+            {% endfor %}
+        </div>
+                
+    </div>
+</div>
+
 
 {% endblock%}
