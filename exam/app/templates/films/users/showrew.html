@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="m-3 text-center ">Список рецензий</h3>
+
+<table class="table">
+    <thead class="text-center">
+        <tr>
+            <th>Название фильма</th>
+            <th>Статус</th>
+            <th>Оценка</th>
+            <th>Текст рецензии</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% for review in reviews %}
+            <tr>
+                <td>{{ review.name }}</td>
+                <td>{{ review.status }}</td>
+                <td>{{ review.mark }}</td>
+                <td>{{ review.text }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

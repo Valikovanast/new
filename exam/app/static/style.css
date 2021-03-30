@@ -1,4 +1,10 @@
-.footer {
+body{
+    background-color: cadetblue;
+    font-family: 'Bebas Neue', cursive;
+   
+}
+
+footer {
     height: 100px;
 }
 

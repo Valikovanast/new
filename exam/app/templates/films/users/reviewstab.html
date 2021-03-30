@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% from 'films/users/pagination.html' import pagination %}
+
+{% block content %}
+
+<h3 class="m-3 text-center ">Список рецензий</h3>
+
+<table class="table">
+    <thead class="text-center">
+        <tr>
+            <th>Название фильма</th>
+            <th>Имя пользователя</th>
+            <th>Дата добавления</th>
+            <th>Управление</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% for review in rev %}
+            <tr>
+                <td >{{ review.name }}</td>
+                <td> {{ review.userlast }} {{ review.userfirst }} {{ review.usermid }}</td>
+                <td>{{ review.date }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="{{ url_for('modif', review_id=review.id) }}">Рассмотреть</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ pagination( request.endpoint, pagination_inf) }}
+
+{% endblock %}

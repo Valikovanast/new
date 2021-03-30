@@ -30,7 +30,7 @@ def logs():
     with mysql.connection.cursor(named_tuple=True) as cursor:
         cursor.execute('SELECT count(*) AS count FROM visit_logs;')
         total_count= cursor.fetchone().count
-    total_pages = math.ceil(total_count/PER_PAGE)
+    total_pages = math.ceil(total_count/PER_PAGE)#округление до ближайшего числа
     pagination_info = {
         'current_page': page,
         'total_pages': total_pages,

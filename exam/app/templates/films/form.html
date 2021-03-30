@@ -1,62 +1,64 @@
-{% macro render_film_form(url, film = {}) %}
+{% macro render_film_form( url, genre, film = {}) %}
 
-<div class="container" style="color: white;">
+<div class="container">
     <form action="{{ url }}" method="POST" enctype="multipart/form-data">
         <div class="form-group row">
             <div class="col-md-6 d-flex flex-column">
                 <div class="form-group">
                     <label for="name" class="col-form-label col-md-2">Название</label>
-                    <input class="form-control" type="text" name="name" id="name" value="{{ film.name or '' }}">
+                    <input class="form-control" type="text" name="name" id="name" value="{{ film.name or '' }}" required>
                 </div>
                 <div class="form-group">
                     <label for="genre" class="col-form-label col-md-2">Жанр</label>
-                    <input class="form-control" type="text" name="genre" id="genre" value="{{ film.genre or '' }}">
+                    <select class="form-control selectpicker" id="genre" name="genre" title="Выберите жанр" multiple required>
+                            {% for genre in genre %}
+                                <option value="{{ genre.id }}">{{ genre.name }}</option>
+                            {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-form-label col-md-2">Описание</label>
-                    <textarea class="form-control flex-grow-1" name="description" id="description" cols="30" rows="5">{{ film.description or '' }}
+                    <textarea class="form-control" name="description" id="description" required>{{ film.description or '' }}
                     </textarea>
-                    
                 </div>
                 <div class="form-group">
                     <label for="prod_year" class="col-form-label col-md-2">Год выпуска</label>
-                    <input class="form-control" type="text" name="prod_year" id="prod_year" value="{{ film.prod_year or '' }}">
+                    <input class="form-control" type="text" name="prod_year" id="prod_year" value="{{ film.prod_year or '' }}" required>
                 </div>
                 <div class="form-group">
                     <label for="country" class="col-form-label col-md-2">Страна</label>
-                    <input class="form-control" type="text" name="country" id="country" value="{{ film.country or '' }}">
+                    <input class="form-control" type="text" name="country" id="country" value="{{ film.country or '' }}" required>
                 </div>
                 <div class="form-group">
                     <label for="director" class="col-form-label col-md-2">Режисер</label>
-                    <input class="form-control" type="text" name="director" id="director" value="{{ film.director or '' }}">
+                    <input class="form-control" type="text" name="director" id="director" value="{{ film.director or '' }}" required>
                 </div>
+            </div>        
+            <div class="col-md-6 d-flex flex-column">
                 <div class="form-group">
                     <label for="screenwriter" class="col-form-label col-md-2">Сценарист</label>
-                    <input class="form-control" type="text" name="screenwriter" id="screenwriter" value="{{ film.screenwriter or '' }}">
+                    <input class="form-control" type="text" name="screenwriter" id="screenwriter" value="{{ film.screenwriter or '' }}" required>
                 </div>
                 <div class="form-group">
                     <label for="actors" class="col-form-label col-md-2">Актеры</label>
-                    <input class="form-control" type="text" name="actors" id="actors" value="{{ film.actors or '' }}">
+                    <input class="form-control" type="text" name="actors" id="actors" value="{{ film.actors or '' }}" required>
                 </div>
                 <div class="form-group">
                     <label for="duration" class="col-form-label col-md-2">Длительность (мин)</label>
-                    <input class="form-control" type="text" name="duration" id="duration" value="{{ film.duration or '' }}">
+                    <input class="form-control" type="text" name="duration" id="duration" value="{{ film.duration or '' }}" required>
                 </div>
-            </div>
-            {% if request.endpoint == 'new' or request.endpoint == 'create' %}
-            <div class="col-md-6 d-flex flex-column">
+                {% if request.endpoint == 'new' or request.endpoint == 'create' %}
                 <div class="form-group">
                     <label for="poster">Постер фильма</label>
-                    <input class="form-control" type="file" name="poster" id="poster">
+                    <input class="form-control" type="file" name="poster" id="poster" required>
                 </div>
                 <div class="form-group background-preview p-3 rounded d-flex align-items-center justify-content-center">
-                    <img src="" class="img-fluid d-none" alt="">
+                    <img src="" alt="poster" class="img-fluid d-none">
                     <label for="poster" class="btn btn-primary">Выбрать изображение</label>
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-    
         <div class="form-group text-center">
             <input type="submit" class="btn btn-primary" value="Сохранить">
         </div>

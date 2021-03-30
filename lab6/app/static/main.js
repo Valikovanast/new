@@ -1,3 +1,8 @@
+
+
+
+
+
 $('#addSubThemeModal').on('show.bs.modal', function (event) {
     let form = this.querySelector('form');
     let themeName = event.relatedTarget.closest('.card-header').querySelector('h5').textContent;

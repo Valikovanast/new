@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="m-3 text-center ">Список рецензий</h3>
+
+<table class="table">
+    <thead class="text-center">
+        <tr>
+            <th>Название фильма</th>
+            <th>Имя пользователя</th>
+            <th>Рецензия</th>
+            <th>Оценка</th>
+            <th>Дата добавления</th>
+            <th>Управление</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+            <tr>
+                <td >{{ review.name }}</td>
+                <td> {{ review.userlast }} {{ review.userfirst }} {{ review.usermid }}</td>
+                <td>{{ review.text }}</td>
+                <td>{{ review.mark }}</td>
+                <td>{{ review.pr_date }}</td>
+                <td>
+                        <div class="btn-group text-center">
+                            <form action="{{ url_for('acceptmod', review_id= review.id_rev) }}" method="POST">
+                                <input type="submit" class="btn btn-primary" value="Одобрить">
+                            </form>
+                            <form action=" {{ url_for('rejectmod', review_id=review.id_rev) }}" method="POST">
+                                <input type="submit" class="btn btn-danger" value="Отклонить">
+                            </form>
+                        </div>
+                   
+                </td>
+            </tr>
+    </tbody>
+</table>
+
+
+{% endblock %}

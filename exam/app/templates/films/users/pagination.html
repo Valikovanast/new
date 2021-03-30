@@ -1,7 +1,7 @@
-{% macro render_pagination( endpoint, pagination_info) %}
+{% macro pagination( endpoint, pagination_inf) %}
 
-{% set page = pagination_info.current_page %}
-{% set total_pages = pagination_info.total_pages %}
+{% set page = pagination_inf.current_page %}
+{% set total_pages = pagination_inf.total_pages %}
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
       <li class="page-item {% if page == 1 %}disabled{% endif %}">

@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from mysql_db import MySQL
 import mysql.connector as connector
 
-
 app= Flask(__name__)
 application = app
 

@@ -17,7 +17,7 @@
         {% for user in users %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td class="user-name">{{ user.last_name }} {{ user.first_name }} {{ user.middle_name or ' ' }}</td>
+            <td class="user-name"> {{ user.last_name }} {{ user.first_name }} {{ user.middle_name or ' ' }}</td>
             <td>{{ user.role_name or 'Не назначена' }}</td>
             <td>  
                 <div class="btn-group">

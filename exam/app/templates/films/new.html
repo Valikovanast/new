@@ -4,11 +4,8 @@
 {% block content %}
 
 <div class="container">
-    <h3 class="my-5"> Добавление фильма</h3>
-
-    {{ render_film_form(url_for('create'), film) }}
+    <h3 class="my-5 text-center"> Добавление фильма</h3>
+    {{ render_film_form(url_for('create'), genre, film) }}
 </div>
-
-
 
 {% endblock %}

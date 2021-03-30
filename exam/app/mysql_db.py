@@ -26,6 +26,7 @@ class MySQL:
             'database' : self.app.config['MYSQL_DATABASE']
         }
 
+
     def teardown_request(self, exception = None):
         db = g.pop('db', None)
         if db is not None:

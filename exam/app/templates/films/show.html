@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
-
-
+{% from 'films/form.html' import render_film_form %}
 {% block content %}
 
 <div class="container">
@@ -9,10 +8,6 @@
 
 <table class="table">    
     <tbody>
-        <tr>
-            <th>Название</th>
-            <th>{{ film.name }}</th>
-        </tr>
         <tr>
             <th>Жанры</th>
             <th>{{ film.genre }}</th>
@@ -45,30 +40,48 @@
             <th>Длительность (мин)</th>
             <th>{{ film.duration }}</th>
         </tr>
-        <tr>
-            <th>Отзывы</th>
-            <th>  </th>
-        </tr>
     </tbody>
 </table>
-
-<table class="table">
-    <tbody>
-        <tr>
-            <th> {{ film.last_name }} {{ film.first_name }} {{ film.middle_name }}</th>
-            <th>{{ film.text_field }}</th>
-            <th>{{ film.mark }}</th>
-        </tr>
-    </tbody>
-</table>
-
-<div class="btn-group">
-    <a class="btn btn-warning" href=" {{ url_for('review', film_id= film.id) }}">Написать рецензию </a>
+<div class="reviews my-1">
+    <h3 class="text-center" style="color: gold;">Отзывы</h3>
+    <div class="row m-1">
+        {% for review in reviews %}
+        <div class="col-sm-6 text-center">
+            <table class="text-center">
+                <thead class="text-center">
+                    <tr class="text-center">
+                        <th class="mx-5">Пользователь</th>
+                        <th class="mx-5">Отзыв</th>
+                        <th class="mx-5">Оценка</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% if review.users_id == current_user.id %}
+                    <tr class="text-center">
+                        <td class="mx-5">Вы</td>
+                        <td class="mx-5">{{ review.text_field }}</td>
+                        <td class=" mx-5">{{ review.mark }}</td>
+                    </tr>
+                    {% else %}
+                    <tr class="text-center">
+                        <td class="mx-5">{{ review.last_name }} {{ review.first_name }}</td>
+                        <td class="mx-5">{{ review.text_field }}</td>
+                        <td class=" mx-5">{{ review.mark }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+  {% endfor %}
+    </div>
 </div>
-
+{% if current_user.is_authenticated %}
+        {% if reviews.users_id != current_user.id %}
+<div class="btn-group d-flex justify-content-center text-center mt-3">
+    <a class="btn btn-secondary text-center" href=" {{ url_for('make_review', film_id=film.id) }}">Написать рецензию </a>
 </div>
-
-
-
+        {% endif %}
+{% endif %}
+</div>
 
 {% endblock %}
