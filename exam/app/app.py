@@ -13,7 +13,7 @@ import markdown
 from werkzeug.utils import secure_filename
 
 
-UPLOAD_FOLDER='/media/images/'
+UPLOAD_FOLDER='media/images/'
 app=Flask(__name__)
 
 application=app
@@ -211,28 +211,23 @@ def create():
     duration = request.form.get('duration') or None
     description=markdown.markdown(description)
     poster = request.files['poster']
-    filename= secure_filename(poster.filename)
-    poster.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    
-    poster.mimetype
-    poster_md5 = hashlib.md5(poster.file.read()).hexdigest()
-    
-    
-    
+    file_name = secure_filename(poster.filename)
+    poster.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+    mime_type=poster.mimetype
+    md5_hash = hashlib.md5(poster.read()).hexdigest()
 
-    query = '''
+    query1 = '''
         INSERT INTO film_description (name, description, prod_year, country, director, screenwriter, actors, duration)
-        VALUES (%s, %s, %s, %s, %s, %s , %s , %s);
-        SET @a=LAST_INSERT_ID();
-        INSERT INTO film_genre( `film_id`, `genre_id`) VALUES (@a, %s);
-        UPDATE film_description
-        SET name= %s, description= %s, prod_year= %s, country= %s, director= %s, screenwriter= %s, actors= %s, duration= %s
-        WHERE id=@a;
-        INSERT INTO poster
-    '''
+        VALUES (%s, %s, %s, %s, %s, %s , %s , %s);'''
+    query2='''
+        SET @a=SELECT MAX(id) as id FROM `film_description`;
+        INSERT INTO film_post( `id_film`, `file_name`, `MIME_type`, `MD5_hash`) VALUES (@a, %s, %s, %s);'''
     cursor = mysql.connection.cursor(named_tuple= True)
     try:
-        cursor.execute(query, (name, description, prod_year, country, director, screenwriter, actors, duration, genre) )
+        cursor.execute(query1, (name, description, prod_year, country, director, screenwriter, actors, duration))
+        cursor.execute('SELECT MAX(id) as id FROM `film_description`;')
+        film_id=cursor.fetchone()
+        cursor.execute(query2, (film_id, file_name, mime_type, md5_hash))
     except connector.errors.DatabaseError as err:
         flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
         film={
@@ -244,22 +239,26 @@ def create():
                 'screenwriter' : screenwriter,
                 'actors' : actors,
                 'duration' : duration,
-        }
-        
+        },
         mysql.connection.rollback()
-
+        mysql.connection.commit()
+        cursor.close()
         if request.form.get('genre'):
             for genre in request.form.get('genre'):
-                query = 'INSERT INTO film_genre (film_id, genre_id) VALUES (%s, %s);'
                 cursor = mysql.connection.cursor(named_tuple=True)
-                cursor.execute(query, (name, genre))
-                mysql.connection.commit()
-                cursor.close()
+                cursor.execute('SELECT * FROM `genre`;')
+                gens= cursor.fetchall()
+                for gen in gens:
+                    if gen.name == genre:
+                        query = ''' INSERT INTO film_genre (film_id, genre_id) VALUES (%s, %s);'''
+                        cursor.execute('SELECT MAX(id) as id FROM `film_description`;')
+                        film_id=cursor.fetchone()
+                        cursor.execute(query, (film_id, gen.id))
+                        mysql.connection.commit()
+                        cursor.close()
         return render_template('films/new.html', film=film, genre=load_genres())
-    mysql.connection.commit()
-    cursor.close()
     flash(' Фильм был успешно добавлен', 'success')
-    return redirect(url_for('show'))
+    return redirect(url_for('index'))
 
 @app.route('/media/images/<filename>')
 def uploaded_posters(filename):

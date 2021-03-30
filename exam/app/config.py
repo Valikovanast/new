@@ -4,5 +4,5 @@ MYSQL_HOST = 'std-mysql.ist.mospolytech.ru'
 MYSQL_DATABASE = 'std_1212'
 MYSQL_PASSWORD = '12345678'
 
-UPLOAD_FOLDER = 'C:/Users/1/веб2/new/exam/media/images'
+
 

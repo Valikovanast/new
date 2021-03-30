@@ -75,13 +75,12 @@
   {% endfor %}
     </div>
 </div>
-{% if current_user.is_authenticated %}
-        {% if reviews.users_id != current_user.id %}
+
 <div class="btn-group d-flex justify-content-center text-center mt-3">
     <a class="btn btn-secondary text-center" href=" {{ url_for('make_review', film_id=film.id) }}">Написать рецензию </a>
 </div>
-        {% endif %}
-{% endif %}
+
+
 </div>
 
 {% endblock %}
