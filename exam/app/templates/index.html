@@ -3,8 +3,7 @@
 {% from 'pagination.html' import render_pagination %}
 
 {% block content %}
-
-  <h3 class="m-3 text-center ">Список фильмов</h3>
+<h3 class="m-3 text-center ">Список фильмов</h3>
 
 <table class="table">
     <thead class="text-center">
@@ -30,19 +29,21 @@
                     {% endif %}
                 {% endfor %}
                 {% if current_user.is_authenticated %}
-                <th>
+                <td>
                     <div class="btn-group">
                         <a class="btn btn-primary" href=" {{ url_for('show', film_id= film.id ) }} ">Просмотр</a>
                         
                           {% if current_user.can('edit', record=user) %}
                             <a class="btn btn-secondary" href=" {{ url_for('edit', film_id= film.id ) }} ">Редактирование</a>
                           {% endif %}
-                          {% if current_user.can('delete', record=user) %}    
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-film-modal" data-url=" {{ url_for('delete', film_id=film.id) }} "> Удалить</button>
+                          {% if current_user.can('delete', record=user) %}
+                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-film-modal" data-url=" {{ url_for('delete', film_id=film.id) }} ">
+                            Удалить
+                          </button>
                           {% endif %}
                     </div>
                         
-                </th>
+                </td>
                 {% endif %}
             </tr>
         {% endfor %}
@@ -56,30 +57,31 @@
   
 {% endif %}
 
-<div class="modal" tabindex="-1" role="dialog" id="delete-film-modal">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="delete-film-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Удаление фильма</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <p>Вы уверены, что хотите удалить фильм <span id="film-name"></span>?</p>
-              <form action="{{ url }}" method="POST" class="d-none">
-                  <input id="delete-btn" type="submit">
-              </form>
-          </div>
-          <div class="modal-footer">
-              <label for="delete-btn" class="btn btn-danger mb-0 cursor-pointer">Да</label>
-              <button type="button" class="btn btn-secondary mb-0" data-dismiss="modal">Нет</button>
-          </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"> Удаление фильма</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <p>Вы уверены, что хотите удалить фильм <span id="film-name"></span> ?</p>
+            <form action="{{ url }}" method="POST">
+                <input type="submit" id="delete-btn" hidden>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <label for="delete-btn" class="btn btn-danger mb-0 cursor-pointer"> Да</label>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+        </div>
       </div>
+    </div>
   </div>
-</div>
 
 {{ render_pagination( request.endpoint, pagination_info) }}
+
 
 
 {% endblock %}

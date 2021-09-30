@@ -34,6 +34,13 @@ def load_genres():
     cursor.close()
     return genre
 
+def load_gen():
+    cursor= mysql.connection.cursor(named_tuple=True)
+    cursor.execute('SELECT film_genre.film_id as film_id, film_genre.genre_id as id, genre.name as name FROM `film_genre` LEFT OUTER JOIN genre ON film_genre.genre_id=genre.id;')
+    genre=cursor.fetchall()
+    cursor.close()
+    return genre
+
 def counting_reviews():
     cursor = mysql.connection.cursor(named_tuple=True)
     cursor.execute('SELECT film_description.* FROM film_description ORDER BY film_description.prod_year DESC;')
@@ -109,7 +116,7 @@ def edit(film_id):
     cursor.execute('SELECT film_description.* FROM film_description WHERE film_description.id=%s;',(film_id,))
     film=cursor.fetchone()
     cursor.close()
-    return render_template('films/edit.html', film=film, genre=load_genres())
+    return render_template('films/edit.html', film=film, genre=load_gen())
 
 
 @app.route('/films/<int:film_id>')
@@ -198,6 +205,31 @@ def rejectmod(review_id):
 def new():
     return render_template('films/new.html', film={}, genre=load_genres())
 
+def last_ins():
+    cursor = mysql.connection.cursor(named_tuple=True)
+    cursor.execute('SELECT MAX(id) as id FROM `film_description`;')
+    film_id=cursor.fetchone()
+    cursor.close()
+    return film_id
+
+
+def load_post():
+    poster = request.files.get('poster')
+    film_id=last_ins()
+    if poster:
+        mimetype=poster.content_type
+        file_name = secure_filename(poster.filename)
+        post=os.path.join(app.config['UPLOAD_FOLDER'], file_name)
+        poster.save(post)
+        with open(post, 'rb') as file:
+            md5_hash = hashlib.md5(file.read())
+            md5=md5_hash.hexdigest()
+    query=''' INSERT INTO film_post( `file_name`, `MIME_type`, `MD5_hash`, `id_film`) VALUES ( %s, %s, %s, %s);'''
+    cursor = mysql.connection.cursor(named_tuple= True)
+    cursor.execute(query, (file_name, mimetype, md5, film_id))
+    mysql.connection.commit()
+    cursor.close()
+
 @app.route('/films/create',methods =['POST'])
 @login_required
 def create():
@@ -208,26 +240,14 @@ def create():
     director = request.form.get('director') or None
     screenwriter = request.form.get('screenwriter') or None
     actors = request.form.get('actors') or None
-    duration = request.form.get('duration') or None
+    duration = int(request.form.get('duration')) or None
     description=markdown.markdown(description)
-    poster = request.files['poster']
-    file_name = secure_filename(poster.filename)
-    poster.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-    mime_type=poster.mimetype
-    md5_hash = hashlib.md5(poster.read()).hexdigest()
-
-    query1 = '''
+    query = '''
         INSERT INTO film_description (name, description, prod_year, country, director, screenwriter, actors, duration)
         VALUES (%s, %s, %s, %s, %s, %s , %s , %s);'''
-    query2='''
-        SET @a=SELECT MAX(id) as id FROM `film_description`;
-        INSERT INTO film_post( `id_film`, `file_name`, `MIME_type`, `MD5_hash`) VALUES (@a, %s, %s, %s);'''
     cursor = mysql.connection.cursor(named_tuple= True)
     try:
-        cursor.execute(query1, (name, description, prod_year, country, director, screenwriter, actors, duration))
-        cursor.execute('SELECT MAX(id) as id FROM `film_description`;')
-        film_id=cursor.fetchone()
-        cursor.execute(query2, (film_id, file_name, mime_type, md5_hash))
+        cursor.execute(query, (name, description, prod_year, country, director, screenwriter, actors, duration))
     except connector.errors.DatabaseError as err:
         flash('При сохранении данных возникла ошибка. Проверьте корректность введённых данных.', 'danger')
         film={
@@ -239,24 +259,23 @@ def create():
                 'screenwriter' : screenwriter,
                 'actors' : actors,
                 'duration' : duration,
-        },
-        mysql.connection.rollback()
-        mysql.connection.commit()
-        cursor.close()
-        if request.form.get('genre'):
-            for genre in request.form.get('genre'):
-                cursor = mysql.connection.cursor(named_tuple=True)
-                cursor.execute('SELECT * FROM `genre`;')
-                gens= cursor.fetchall()
-                for gen in gens:
-                    if gen.name == genre:
-                        query = ''' INSERT INTO film_genre (film_id, genre_id) VALUES (%s, %s);'''
-                        cursor.execute('SELECT MAX(id) as id FROM `film_description`;')
-                        film_id=cursor.fetchone()
-                        cursor.execute(query, (film_id, gen.id))
-                        mysql.connection.commit()
-                        cursor.close()
+        }
         return render_template('films/new.html', film=film, genre=load_genres())
+    mysql.connection.commit()
+    cursor.close()
+    if request.form.get('genre'):
+        for genre in request.form.get('genre'):
+            cursor = mysql.connection.cursor(named_tuple=True)
+            cursor.execute('SELECT * FROM `genre`;')
+            gens= cursor.fetchall()
+            for gen in gens:
+                if gen.name == genre:
+                    query = ''' INSERT INTO film_genre (film_id, genre_id) VALUES (%s, %s);'''
+                    cursor.execute('SELECT MAX(id) as id FROM `film_description`;')
+                    film_id=cursor.fetchone()
+                    cursor.execute(query, (film_id, gen.id))
+            mysql.connection.commit()
+            cursor.close()
     flash(' Фильм был успешно добавлен', 'success')
     return redirect(url_for('index'))
 
@@ -268,16 +287,13 @@ def uploaded_posters(filename):
 @login_required
 def update(film_id):
     name = request.form.get('name') or None
-    description = request.form.get('description') or None
+    description = bleach.clean(request.form.get('description')) or None
     prod_year = request.form.get('prod_year') or None
     country = request.form.get('country') or None
     director = request.form.get('director') or None
     screenwriter = request.form.get('screenwriter') or None
     actors = request.form.get('actors') or None
-    try:
-        duration = int(request.form.get('duration'))
-    except ValueError:
-        duration = None
+    duration = int(request.form.get('duration')) or None
     description=markdown.markdown(description)
     query = '''
         UPDATE film_description
@@ -305,7 +321,6 @@ def update(film_id):
     cursor.close()
     flash('Фильм успешно обновлен', 'success')
     return redirect(url_for('index'))
-
 
 
 @app.route('/media/<filename>')

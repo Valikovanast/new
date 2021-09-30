@@ -10,9 +10,9 @@
                 </div>
                 <div class="form-group">
                     <label for="genre" class="col-form-label col-md-2">Жанр</label>
-                    <select class="form-control selectpicker" id="genre" name="genre" title="Выберите жанр" multiple required>
-                            {% for genre in genre %}
-                                <option value="{{ genre.id }}">{{ genre.name }}</option>
+                    <select class="form-control selectpicker" id="genre" name="genre" title="Выберите жанр" multiple>
+                            {% for gen in genre %}
+                                <option value="{{ gen.id }}">{{ gen.name }}</option>
                             {% endfor %}
                     </select>
                 </div>
@@ -51,10 +51,6 @@
                 <div class="form-group">
                     <label for="poster">Постер фильма</label>
                     <input class="form-control" type="file" name="poster" id="poster" required>
-                </div>
-                <div class="form-group background-preview p-3 rounded d-flex align-items-center justify-content-center">
-                    <img src="" alt="poster" class="img-fluid d-none">
-                    <label for="poster" class="btn btn-primary">Выбрать изображение</label>
                 </div>
                 {% endif %}
             </div>
