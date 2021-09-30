@@ -5,13 +5,13 @@ login_manager= LoginManager()
 
 
 app= Flask(__name__)
-application = app
+#application = app
 
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Для доступа к данной странице необходимо пройти процедуру аутентификации.'
 login_manager.login_message_category = 'warning'
-
+application = app
 app.config.from_pyfile('config.py')
 
 def get_users():
