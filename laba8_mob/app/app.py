@@ -9,7 +9,7 @@ application = app
 app.config.from_pyfile('config.py')
 
 
-with open("/home/std/web-2021-1/laba8_mob/app/static/img/12.jpg", "rb") as img:
+with open("/home/std/web-2021-1/new/laba8_mob/app/static/img/12.jpg", "rb") as img:
     encoded_string = base64.b64encode(img.read())
 
 
